@@ -1,7 +1,5 @@
 const path = require('path');
-const fs = require('fs-extra');
 const crypto = require("crypto");
-
 
 /**
  * 
@@ -21,7 +19,6 @@ const globalField = (module) => {
     }
 }
 
-
 /**
  * 
  * @param {*} ids 
@@ -30,18 +27,7 @@ const randomId = () => {
     return crypto.randomBytes(32).toString("hex");
 }
 
-/**
- * 
- * @deprecated
- * @param {string} module 
- */
-const requireField = (module) => {
-    delete require.cache[require.resolve(module)];
-    return require(module);
-}
-
 module.exports = {
     globalField,
-    randomId,
-    requireField
+    randomId
 };
