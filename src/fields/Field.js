@@ -1,6 +1,9 @@
-class Field {
+const ModuleField = require('./ModuleField');
+
+class Field extends ModuleField {
 
     constructor(data) {
+        super();
         this.data = data;
     }
 
@@ -497,6 +500,10 @@ class Field {
     }
 
 
+
+
+
+
     /**
      * Return the fields Json representation.
      */
@@ -504,100 +511,10 @@ class Field {
         return this.data;
     }
 
-    /**
-     * 
-     * @param {string} controllingField The controlling field name. Including nesting with group.name
-     * @param string} regex The comparing value
-     * @param {string} type Comparison type. Eg. 'EQUAL' etc.
-     */
-    visibleIf(controllingField, regex, type = "EQUAL") {
-        if (!this.data.visibility) {
-            this.data.visibility = {};
-        }
 
-        this.data.visibility = Object.assign(this.data.visibility, {
-            "controlling_field": controllingField,
-            "controlling_value_regex": regex,
-            "operator": type,
-        });
-        return this;
-    }
 
-    /**
-     * 
-     * @param {object} subFields eg. {opacity: true}
-     */
-    hiddenSubfields(subFields) {
-        if (!this.data.visibility) {
-            this.data.visibility = {};
-        }
 
-        this.data.visibility.hidden_subfields = subFields;
-        return this;
-    }
 
-    /**
-     * Field should repeat
-     * @param {Object} overrides 
-     */
-    repeat(overrides = {}) {
-        this.data.occurrence = Object.assign({
-            "min": null,
-            "max": null,
-            "sorting_label_field": null,
-            "default": null
-        }, overrides);
-        this.data.default = [];
-
-        return this;
-    }
-
-    /**
-     * Determines if the field can be left blank in the editor. If true, content will not be allowed to publish without filling out this field.
-     * @param {boolean}
-     */
-    required(required = true) {
-        this.data.required = Boolean(required);
-        return this;
-    }
-
-    /**
-     * Determines if the field is editable in the content editor. If "true", the field will not appear in the content editor.
-     * @param {boolean} 
-     */
-    locked(locked = true) {
-        this.data.locked = Boolean(locked);
-        return this;
-    }
-
-    /**
-     * Set name and label
-     * @param {String} name 
-     * @param {String} label 
-     */
-    name(name, label) {
-        this.data.name = name;
-        this.data.label = label;
-        return this;
-    }
-
-    /**
-     * Set inline help text
-     * @param {String} text 
-     */
-    inlineHelpText(text) {
-        this.data.inline_help_text = text;
-        return this;
-    }
-
-    /**
-     * Set help text
-     * @param {String} text 
-     */
-    helpText(text) {
-        this.data.help_text = text;
-        return this;
-    }
 
     /**
      * Set default value of field

@@ -7,7 +7,7 @@ const FieldTransformer = require('../fields/FieldTransformer');
 
 const clearFieldsJson = async compilation => {
     return new Promise(async (resolve, reject) => {
-        let distFolder = compilation.options.context + '/dist';
+        let distFolder = compilation.options.output.path;
         glob(distFolder + '/**/fields.json', {}, (err, files) => {
             files.forEach(file => {
                 fs.unlinkSync(file);
@@ -32,7 +32,8 @@ class FieldsPlugin {
             return new Promise(async (resolve, reject) => {
                 // Set the distfolder to look for files
                 // options.context gives root of the project.
-                let distFolder = compilation.options.context + '/dist';
+
+                let distFolder = compilation.options.output.path;
 
                 // Handle fields.js file
                 await new Promise((resolve, reject) => {
