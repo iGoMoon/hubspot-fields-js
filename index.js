@@ -1,7 +1,7 @@
 const Group = require('./src/fields/Group');
 const Field = require('./src/fields/Field');
 const FieldsPlugin = require('./src/plugins/FieldsPlugin');
-const { globalField, randomId, requireField } = require('./src/Helpers');
+const { globalField, randomId } = require('./src/Helpers');
 
 module.exports = {
     // Field + Group helpers
@@ -12,7 +12,6 @@ module.exports = {
     FieldsPlugin,
 
     // Helpers
-    requireField,
     globalField,
     randomId
 };
