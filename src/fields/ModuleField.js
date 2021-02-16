@@ -108,6 +108,24 @@ class ModuleField {
     }
 
     /**
+     * Set id
+     * @param {String} id 
+     */
+    id(id) {
+        this.data.id = id;
+        return this;
+    }
+
+    /**
+     * Set label
+     * @param {String} label 
+     */
+    label(label) {
+        this.data.label = label;
+        return this;
+    }
+
+    /**
      * Set default value of field
      * @param {*} value 
      */
