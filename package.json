@@ -1,21 +1,21 @@
 {
   "name": "@igomoon/hubspot-fields-js",
   "label": "hubspot-fields-js",
+  "description": "A webpack plugin to generate fields.json files with js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/iGoMoon/hubspot-fields-js"
+    "url": "git://github.com/iGoMoon/hubspot-fields-js.git"
   },
   "author": "iGoMoon",
-  "version": "1.0.0",
-  "dependencies": {
-    "copy-webpack-plugin": "^6.3.1",
-    "fs-extra": "^9.0.1",
-    "webpack": "^5.4.0"
-  },
+  "version": "1.0.1",
   "devDependencies": {
     "jest": "^26.6.3"
   },
   "scripts": {
     "test": "npx jest"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/iGoMoon/hubspot-fields-js/issues"
+  },
+  "homepage": "https://github.com/iGoMoon/hubspot-fields-js#readme"
 }

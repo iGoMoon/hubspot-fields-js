@@ -1,6 +1,5 @@
-const fs = require('fs-extra');
+const fs = require('fs');
 const glob = require('glob');
-const { Compilation } = require('webpack');
 
 const FieldTransformer = require('../fields/FieldTransformer');
 

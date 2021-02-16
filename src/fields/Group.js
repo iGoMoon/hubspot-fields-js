@@ -1,4 +1,3 @@
-const { SourceMapDevToolPlugin } = require('webpack');
 const ModuleField = require('./ModuleField');
 
 class Group extends ModuleField {

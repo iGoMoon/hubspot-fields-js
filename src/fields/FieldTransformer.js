@@ -1,4 +1,4 @@
-const fs = require('fs-extra');
+const fs = require('fs');
 
 class FieldTransformer {
     
@@ -16,7 +16,7 @@ class FieldTransformer {
 
         try {
             // Try to load the fields.json file
-            fieldsJson = fs.readJSONSync(file);
+            fieldsJson = JSON.parse(fs.readFileSync(file));
             
             // Append the transformed fields to the end of the fields.json file
             fieldsJson = fieldsJson.concat(transformed);
