@@ -4,7 +4,13 @@ class Field extends ModuleField {
 
     constructor(data) {
         super();
-        this.data = data;
+        this.data = Object.assign({
+			"required": false,
+			"locked": false,
+			"help_text": "",
+			"inline_help_text": "",
+			"default": null
+		}, data);
     }
 
     /**
@@ -15,12 +21,8 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "blog_field",
             "label": "Blog field",
-            "required": false,
-            "locked": false,
             "type": "blog",
             "placeholder": "",
-            "inline_help_text": "",
-            "help_text": "",
             "default": null
         }, overrides));
     }
@@ -33,11 +35,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "boolean_field",
             "label": "Boolean field",
-            "required": false,
-            "locked": false,
             "type": "boolean",
-            "inline_help_text": "",
-            "help_text": "",
             "default": false
         }, overrides));
     }
@@ -51,11 +49,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "choice_field",
             "label": "Choice field",
-            "required": false,
-            "locked": false,
             "display": "select",
-            "inline_help_text": "",
-            "help_text": "",
             "choices": choices,
             "type": "choice",
             "placeholder": "",
@@ -71,10 +65,6 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "color_field",
             "label": "Color field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "type": "color",
             "default": {
                 "color": "#ffffff",
@@ -91,12 +81,27 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "cta_field",
             "label": "CTA field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "type": "cta",
             "default": null
+        }, overrides));
+	}
+	
+	/**
+     * CRM Object field
+     * @param {Object} overrides
+	 * @param {String} overrides.object_type - Type of CRM Object the user can pick from.
+  	 * @param {Array} overrides.properties_to_fetch - Array of property names associated with the object type in string form. {@link https://developers.hubspot.com/docs/cms/features/custom-objects#supported-crm-object-types}
+  	 * @param {Object} overrides.default - Object with id of default selected object instance. Contact ID, Company ID etc
+	 *
+	 * @see {@link https://developers.hubspot.com/docs/cms/building-blocks/module-theme-fields#crm-object} 
+     */
+    static crmObject(overrides) {
+        return new Field(Object.assign({
+            "name" : "crmobject_field",
+			"label" : "CRM object",
+			"object_type" : "CONTACT",
+			"properties_to_fetch" : [ ],
+			"type" : "crmobject"
         }, overrides));
     }
 
@@ -108,12 +113,8 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "date_field",
             "label": "Date field",
-            "required": false,
-            "locked": false,
             "step": 1,
             "type": "date",
-            "inline_help_text": "",
-            "help_text": "",
             "default": null
         }, overrides));
     }
@@ -126,12 +127,8 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "datetime_field",
             "label": "Date and time field",
-            "required": false,
-            "locked": false,
             "step": 30,
             "type": "datetime",
-            "inline_help_text": "",
-            "help_text": "",
             "default": null
         }, overrides));
     }
@@ -144,13 +141,28 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "email_field",
             "label": "Email Address Field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "type": "email",
             "placeholder": "",
             "default": null
+        }, overrides));
+    }
+	
+	/**
+     * Embed field
+     * @param {Object} overrides
+	 * @param {Array} overrides.supported_source_types - Supported source types for either oEmbed URLs or HTML embed code
+  	 * @param {Array} overrides.supported_oembed_types - Supported oEmbed type including "photo", "video", "link", and "rich".
+  	 * @param {Object} overrides.default - An array containing the "source_type" parameter. This parameter has one string based value from the options provided in the "supported_source_types" parameter.
+	 *
+	 * @see {@link https://developers.hubspot.com/docs/cms/building-blocks/module-theme-fields#embed} 
+     */
+    static embed(overrides) {
+        return new Field(Object.assign({
+            "name" : "embed_field",
+			"label" : "Embed",
+			"supported_source_types" : [ "oembed", "html" ],
+			"supported_oembed_types" : [ "photo", "video", "link", "rich" ],
+			"type" : "embed",
         }, overrides));
     }
 
@@ -163,10 +175,6 @@ class Field extends ModuleField {
             "picker": "file",
             "name": "file_field",
             "label": "File field",
-            "required": false,
-            "inline_help_text": "",
-            "help_text": "",
-            "locked": false,
             "type": "file",
             "default": null
         }, overrides));
@@ -180,10 +188,6 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "followupemail_field",
             "label": "Followup email field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "type": "followupemail",
             "placeholder": "",
             "default": null
@@ -198,10 +202,6 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "font_field",
             "label": "font_field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "load_external_fonts": true,
             "type": "font",
             "default": {
@@ -223,10 +223,6 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "form_field",
             "label": "Form field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "type": "form",
             "default": {
                 "response_type": "inline",
@@ -243,13 +239,32 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "hubdbtable_field",
             "label": "HubDB table field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "type": "hubdbtable",
             "placeholder": "",
             "default": null
+        }, overrides));
+    }
+	
+	/**
+     * HubDB Row field
+     * @param {Object} overrides
+	 * @param {string} overrides.table_name_or_id - The name or ID of the HubDB table. This field is required.
+  	 * @param {Array} overrides.columns_to_fetch - An array of column names to fetch from the table. If left blank, will return all columns in the table.
+  	 * @param {Array} overrides.display_columns - An array of column names to use in choice label. If left blank, will return only the first column in the table.
+  	 * @param {String} overrides.display_format - The format you would like the column data to display in the HubDB row selector using the percent symbol and number to designate a column. 
+  	 * @param {Object} overrides.default - Object containing “id” for setting the default hubdb row.
+	 *
+	 * @see {@link https://developers.hubspot.com/docs/cms/building-blocks/module-theme-fields#hubdb-row} 
+     */
+    static hubdbRow(overrides) {
+        return new Field(Object.assign({
+            "name" : "hubdbrow_field",
+			"label" : "HubDB row",
+			"table_name_or_id" : "",
+			"columns_to_fetch" : [],
+			"display_columns" : [],
+			"display_format" : "%0 - %1",
+			"type" : "hubdbrow",
         }, overrides));
     }
 
@@ -261,10 +276,6 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "icon_field",
             "label": "Icon field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "type": "icon",
             "default": {}
         }, overrides));
@@ -278,10 +289,6 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "image_field",
             "label": "Image field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "responsive": true,
             "resizable": false,
             "type": "image",
@@ -300,12 +307,8 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "link_field",
             "label": "Link field",
-            "required": false,
-            "locked": false,
             "supported_types": ["EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG"],
             "type": "link",
-            "inline_help_text": "",
-            "help_text": "",
             "default": {
                 "url": {
                     "content_id": null,
@@ -326,10 +329,6 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "logo_field",
             "label": "Logo field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "resizable": true,
             "type": "logo",
             "default": {
@@ -348,10 +347,6 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "menu_field",
             "label": "Menu field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "type": "menu",
             "placeholder": "",
             "default": null
@@ -366,15 +361,11 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "number_field",
             "label": "Number field",
-            "required": false,
-            "locked": false,
             "display": "text",
             "step": 1,
             "type": "number",
             "min": null,
             "max": null,
-            "inline_help_text": "",
-            "help_text": "",
             "default": null
         }, overrides));
     }
@@ -387,10 +378,6 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "page_field",
             "label": "Page field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "type": "page",
             "placeholder": "",
             "default": null
@@ -405,11 +392,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "richtext_field",
             "label": "Rich text field",
-            "required": false,
-            "locked": false,
             "type": "richtext",
-            "inline_help_text": "",
-            "help_text": "",
             "default": null
         }, overrides));
     }
@@ -422,11 +405,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "simplemenu_field",
             "label": "Simple menu field",
-            "required": false,
-            "locked": false,
             "type": "simplemenu",
-            "inline_help_text": "",
-            "help_text": "",
             "default": []
         }, overrides));
     }
@@ -439,10 +418,6 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "tag_field",
             "label": "Tag field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "tag_value": "SLUG",
             "type": "tag",
             "placeholder": "",
@@ -458,15 +433,11 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "text",
             "label": "Text",
-            "required": false,
-            "locked": false,
             "validation_regex": "",
             "allow_new_line": false,
             "show_emoji_picker": false,
             "type": "text",
             "placeholder": "",
-            "inline_help_text": "",
-            "help_text": "",
             "default": null
         }, overrides));
     }
@@ -479,10 +450,6 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "url_field",
             "label": "URL field",
-            "required": false,
-            "locked": false,
-            "inline_help_text": "",
-            "help_text": "",
             "supported_types": [
                 "EXTERNAL",
                 "CONTENT",
@@ -498,23 +465,50 @@ class Field extends ModuleField {
             }
         }, overrides));
     }
-
-
-
-
-
-
+	
+	/**
+     * Video field
+     * @param {Object} overrides
+  	 * @param {Object} overrides.default - Video object with settings for player_id, height, width, size_type, and conversion_asset object.
+	 *
+	 * @see {@link https://developers.hubspot.com/docs/cms/building-blocks/module-theme-fields#video} 
+     */
+    static video(overrides) {
+		return new Field(Object.assign({
+			"name" : "videoplayer_field",
+			"label" : "Video",
+			"type" : "videoplayer",
+			"default" : {
+				"player_id" : null,
+				"height" : null,
+				"width" : null,
+				"conversion_asset" : {
+					"type" : "CTA",
+					"id" : null,
+					"position" : "POST"
+				}
+			}
+        }, overrides));
+	}
+	
+	/**
+     * Salesforce Campaign field
+     * @param {Object} overrides
+     */
+    static sfCampaign(overrides) {
+		return new Field(Object.assign({
+			"name" : "sfdc_campaign",
+			"label" : "Salesforce Campaign",
+			"type" : "salesforcecampaign",
+        }, overrides));
+	}
+	
     /**
      * Return the fields Json representation.
      */
     toJSON() {
         return this.data;
     }
-
-
-
-
-
 
     /**
      * Set default value of field
@@ -523,9 +517,7 @@ class Field extends ModuleField {
     default(value) {
         switch (this.data.type) {
             case "link":
-                this.data.default.url.href = value;
-                break;
-            case "url":
+			case "url":
                 this.data.default.url.href = value;
                 break;
             case "color":
@@ -537,6 +529,13 @@ class Field extends ModuleField {
             case "form":
                 this.data.default.form_id = value;
                 break;
+            case "crmobject":
+            case "hubdbrow":
+				this.data.default.id = value;
+                break;
+            case "embed":
+				this.data.default.source_type = value;
+                break;
             default:
                 this.data.default = value;
                 break;
@@ -544,7 +543,6 @@ class Field extends ModuleField {
 
         return this;
     }
-
 
 }
 
