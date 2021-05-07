@@ -9,7 +9,7 @@ class Field extends ModuleField {
 			"locked": false,
 			"help_text": "",
 			"inline_help_text": "",
-			"default": null
+			//"default": null (HS handles this for us)
 		}, data);
     }
 
@@ -21,9 +21,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "blog_field",
             "label": "Blog field",
-            "type": "blog",
-            "placeholder": "",
-            "default": null
+            "type": "blog"
         }, overrides));
     }
 
@@ -36,7 +34,7 @@ class Field extends ModuleField {
             "name": "boolean_field",
             "label": "Boolean field",
             "type": "boolean",
-            "default": false
+            //"default": false
         }, overrides));
     }
 
@@ -49,11 +47,9 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "choice_field",
             "label": "Choice field",
-            "display": "select",
+            //"display": "select",
             "choices": choices,
-            "type": "choice",
-            "placeholder": "",
-            "default": null
+            "type": "choice"
         }, overrides));
     }
 
@@ -65,11 +61,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "color_field",
             "label": "Color field",
-            "type": "color",
-            "default": {
-                "color": "#ffffff",
-                "opacity": 100
-            }
+            "type": "color"
         }, overrides));
     }
 
@@ -81,10 +73,9 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "cta_field",
             "label": "CTA field",
-            "type": "cta",
-            "default": null
+            "type": "cta"
         }, overrides));
-	}
+	} 
 	
 	/**
      * CRM Object field
@@ -100,7 +91,7 @@ class Field extends ModuleField {
             "name" : "crmobject_field",
 			"label" : "CRM object",
 			"object_type" : "CONTACT",
-			"properties_to_fetch" : [ ],
+			//"properties_to_fetch" : [ ],
 			"type" : "crmobject"
         }, overrides));
     }
@@ -113,9 +104,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "date_field",
             "label": "Date field",
-            "step": 1,
-            "type": "date",
-            "default": null
+            "type": "date"
         }, overrides));
     }
 
@@ -126,10 +115,9 @@ class Field extends ModuleField {
     static dateTime(overrides) {
         return new Field(Object.assign({
             "name": "datetime_field",
-            "label": "Date and time field",
-            "step": 30,
-            "type": "datetime",
-            "default": null
+			"label": "Date and time field",
+			//"step" : 30,
+            "type": "datetime"
         }, overrides));
     }
 
@@ -141,9 +129,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "email_field",
             "label": "Email Address Field",
-            "type": "email",
-            "placeholder": "",
-            "default": null
+            "type": "email"
         }, overrides));
     }
 	
@@ -160,8 +146,8 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name" : "embed_field",
 			"label" : "Embed",
-			"supported_source_types" : [ "oembed", "html" ],
-			"supported_oembed_types" : [ "photo", "video", "link", "rich" ],
+			//"supported_source_types" : [ "oembed", "html" ],
+			//"supported_oembed_types" : [ "photo", "video", "link", "rich" ],
 			"type" : "embed",
         }, overrides));
     }
@@ -172,11 +158,10 @@ class Field extends ModuleField {
      */
     static file(overrides) {
         return new Field(Object.assign({
-            "picker": "file",
             "name": "file_field",
-            "label": "File field",
-            "type": "file",
-            "default": null
+			"label": "File field",
+			//"picker" : "file",
+            "type": "file"
         }, overrides));
     }
 
@@ -188,9 +173,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "followupemail_field",
             "label": "Followup email field",
-            "type": "followupemail",
-            "placeholder": "",
-            "default": null
+            "type": "followupemail"
         }, overrides));
     }
 
@@ -202,16 +185,14 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "font_field",
             "label": "font_field",
-            "load_external_fonts": true,
-            "type": "font",
-            "default": {
-                "size": 12,
-                "font": "Merriweather",
-                "font_set": "GOOGLE",
-                "size_unit": "px",
-                "color": "#000",
-                "styles": {}
-            }
+			"type": "font",
+			//"load_external_fonts" : true,
+			//"default" : {
+			// 	"size": 12,
+			// 	"size_unit": "px",
+			// 	"color": "#000",
+			// 	"styles": {}
+			// }
         }, overrides));
     }
 
@@ -224,27 +205,13 @@ class Field extends ModuleField {
             "name": "form_field",
             "label": "Form field",
             "type": "form",
-            "default": {
-                "response_type": "inline",
-                "message": "Thanks for submitting the form."
-            }
+            // "default": {
+            //     "response_type": "inline",
+            //     "message": "Thanks for submitting the form."
+            // }
         }, overrides));
-    }
-
-    /**
-     * HubDB Table field
-     * @param {Object} overrides 
-     */
-    static hubdbTable(overrides) {
-        return new Field(Object.assign({
-            "name": "hubdbtable_field",
-            "label": "HubDB table field",
-            "type": "hubdbtable",
-            "placeholder": "",
-            "default": null
-        }, overrides));
-    }
-	
+	}
+		
 	/**
      * HubDB Row field
      * @param {Object} overrides
@@ -256,15 +223,27 @@ class Field extends ModuleField {
 	 *
 	 * @see {@link https://developers.hubspot.com/docs/cms/building-blocks/module-theme-fields#hubdb-row} 
      */
-    static hubdbRow(overrides) {
+	static hubdbRow(overrides) {
         return new Field(Object.assign({
             "name" : "hubdbrow_field",
 			"label" : "HubDB row",
 			"table_name_or_id" : "",
-			"columns_to_fetch" : [],
-			"display_columns" : [],
-			"display_format" : "%0 - %1",
+			// "columns_to_fetch" : [],
+			// "display_columns" : [],
+			// "display_format" : "%0 - %1",
 			"type" : "hubdbrow",
+        }, overrides));
+    }
+
+    /**
+     * HubDB Table field
+     * @param {Object} overrides 
+     */
+    static hubdbTable(overrides) {
+        return new Field(Object.assign({
+            "name": "hubdbtable_field",
+            "label": "HubDB table field",
+            "type": "hubdbtable"
         }, overrides));
     }
 
@@ -276,8 +255,8 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "icon_field",
             "label": "Icon field",
-            "type": "icon",
-            "default": {}
+			"type": "icon"
+			//"default": {}
         }, overrides));
     }
 
@@ -289,13 +268,16 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "image_field",
             "label": "Image field",
-            "responsive": true,
-            "resizable": false,
-            "type": "image",
-            "default": {
-                "src": "",
-                "alt": null
-            }
+            //"responsive": true,
+            //"show_loading": false,
+            //"resizable": true,
+			"type": "image",
+			// "default" : {
+			// 	"size_type" : "auto",
+			// 	"src" : "",
+			// 	"alt" : null,
+			// 	"loading": "disabled"
+			// }
         }, overrides));
     }
 
@@ -307,17 +289,17 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "link_field",
             "label": "Link field",
-            "supported_types": ["EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG"],
             "type": "link",
-            "default": {
-                "url": {
-                    "content_id": null,
-                    "type": "EXTERNAL",
-                    "href": ""
-                },
-                "open_in_new_tab": false,
-                "no_follow": false
-            }
+            //"supported_types": ["EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG"],
+            // "default": {
+			// 	"url" : {
+			// 		"content_id" : null,
+			// 		"type" : "EXTERNAL",
+			// 		"href" : ""
+			// 	},
+			// 	"open_in_new_tab" : false,
+			// 	"no_follow" : false
+			// }
         }, overrides));
     }
 
@@ -329,13 +311,12 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "logo_field",
             "label": "Logo field",
-            "resizable": true,
             "type": "logo",
-            "default": {
-                "override_inherited_src": false,
-                "src": null,
-                "alt": null
-            }
+            // "default": {
+			// 	"override_inherited_src" : false,
+			// 	"src" : null,
+			// 	"alt" : null
+			// }
         }, overrides));
     }
 
@@ -348,8 +329,7 @@ class Field extends ModuleField {
             "name": "menu_field",
             "label": "Menu field",
             "type": "menu",
-            "placeholder": "",
-            "default": null
+            "default": "default"
         }, overrides));
     }
 
@@ -361,12 +341,11 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "number_field",
             "label": "Number field",
-            "display": "text",
-            "step": 1,
             "type": "number",
-            "min": null,
-            "max": null,
-            "default": null
+            // "display": "text",
+            // "step": 1,
+            // "min": null,
+            // "max": null
         }, overrides));
     }
 
@@ -378,9 +357,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "page_field",
             "label": "Page field",
-            "type": "page",
-            "placeholder": "",
-            "default": null
+            "type": "page"
         }, overrides));
     }
 
@@ -392,8 +369,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "richtext_field",
             "label": "Rich text field",
-            "type": "richtext",
-            "default": null
+            "type": "richtext"
         }, overrides));
     }
 
@@ -405,8 +381,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "simplemenu_field",
             "label": "Simple menu field",
-            "type": "simplemenu",
-            "default": []
+            "type": "simplemenu"
         }, overrides));
     }
 
@@ -418,10 +393,8 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "tag_field",
             "label": "Tag field",
-            "tag_value": "SLUG",
-            "type": "tag",
-            "placeholder": "",
-            "default": null
+            //"tag_value": "SLUG",
+            "type": "tag"
         }, overrides));
     }
 
@@ -433,12 +406,10 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "text",
             "label": "Text",
-            "validation_regex": "",
-            "allow_new_line": false,
-            "show_emoji_picker": false,
-            "type": "text",
-            "placeholder": "",
-            "default": null
+            // "validation_regex": "",
+            // "allow_new_line": false,
+            // "show_emoji_picker": false,
+            "type": "text"
         }, overrides));
     }
 
@@ -450,19 +421,13 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "url_field",
             "label": "URL field",
-            "supported_types": [
-                "EXTERNAL",
-                "CONTENT",
-                "FILE",
-                "EMAIL_ADDRESS",
-                "BLOG"
-            ],
             "type": "url",
-            "default": {
-                "content_id": null,
-                "href": "",
-                "type": "EXTERNAL"
-            }
+            //"supported_types": ["EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG"],
+            // "default": {
+			// 	"content_id" : null,
+			// 	"href" : "",
+			// 	"type" : "EXTERNAL"
+			// }
         }, overrides));
     }
 	
@@ -477,17 +442,7 @@ class Field extends ModuleField {
 		return new Field(Object.assign({
 			"name" : "videoplayer_field",
 			"label" : "Video",
-			"type" : "videoplayer",
-			"default" : {
-				"player_id" : null,
-				"height" : null,
-				"width" : null,
-				"conversion_asset" : {
-					"type" : "CTA",
-					"id" : null,
-					"position" : "POST"
-				}
-			}
+			"type" : "videoplayer"
         }, overrides));
 	}
 	
@@ -498,7 +453,7 @@ class Field extends ModuleField {
     static sfCampaign(overrides) {
 		return new Field(Object.assign({
 			"name" : "sfdc_campaign",
-			"label" : "Salesforce Campaign",
+			"label" : "Salesforce Campaign Field",
 			"type" : "salesforcecampaign",
         }, overrides));
 	}
