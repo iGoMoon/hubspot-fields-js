@@ -2,11 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.1.1] - 2021-05-07
+## [1.1.2] - 2021-05-07
+- Wrong version in ReadMe.md
+
+## [1.1.1] - 2021-05-07 (Not published on NPM)
 - Upadate this changelog
 
 ## [1.1.0] - 2021-05-07 (Not published on NPM)
-- Upadate Readme and contributing file
+- Update Readme and contributing file
 
 ## [1.0.4] - 2021-05-07
 - Update Field methods so we dont override hubspot defaults
