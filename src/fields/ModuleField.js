@@ -130,7 +130,29 @@ class ModuleField {
      * @param {*} value 
      */
     default(value) {
-        this.default = value;
+        this.data.default = value;
+        return this;
+	}
+
+    /**
+     * Set chocies for choice
+     * @param {Array} choices
+     */
+	choices(choices = []) {
+		if (this.data.type == 'choice') {
+			this.data.choices = choices;
+		}
+        return this;
+    }
+
+    /**
+     * Set children for choice
+     * @param {Array} children
+     */
+	children(children = []) {
+		if (this.data.type == 'group') {
+			this.data.children = children;
+		}
         return this;
     }
 

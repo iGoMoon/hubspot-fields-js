@@ -1,6 +1,6 @@
 # HubSpot Fields JS <!-- omit in toc -->
 
-<img src="https://img.shields.io/badge/Version-1.1.2-brightgreen" />
+<img src="https://img.shields.io/badge/Version-1.1.3-brightgreen" />
 
 The package makes using JavaScript to generate HubSpot module `fields.json` files on local development straightforward.
 
@@ -9,6 +9,8 @@ The package makes using JavaScript to generate HubSpot module `fields.json` file
 - [Requirements](#requirements)
 - [Why is it needed?](#why-is-it-needed)
 - [Installation](#installation)
+	- [Install the package](#install-the-package)
+	- [Configure Webpack Config](#configure-webpack-config)
 - [Example fields.js file](#example-fieldsjs-file)
 - [Usage : Field Types](#usage--field-types)
 - [Usage: Groups](#usage-groups)
@@ -25,6 +27,8 @@ The package makes using JavaScript to generate HubSpot module `fields.json` file
 	- [Required](#required)
 	- [Hidden Sub Fields](#hidden-sub-fields)
 	- [Locked](#locked)
+	- [Choices](#choices)
+	- [Children](#children)
 - [Advanced Usage](#advanced-usage)
 - [About iGoMoon](#about-igomoon)
 	- [We're Hiring](#were-hiring)
@@ -45,18 +49,23 @@ Within your modules, you create a `fields.js` file in place of `fields.json` and
 
 ## Installation
 
+### Install the package
+
 ```shell
-npm install @igmooon/hubspot-fields-js --save-dev
+npm install @igomoon/hubspot-fields-js --save-dev
 ```
+
+### Configure Webpack Config
+
 1. Set up a hubspot.config.yml using the HubSpot CMS local development instructions.
-2. Add the **hubspot-fields-js** plugin to your webpack.config.js. Currently this has no configuration options. 
+2. Add the **hubspot-fields-js** plugin to your webpack.config.js.
 
 Example `webpack.config.js`
 
 ```javascript
 const HubSpotAutoUploadPlugin = require("@hubspot/webpack-cms-plugins/HubSpotAutoUploadPlugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-// Include the Fields JS Plugin
+// STEP 1 : Include the Fields JS Plugin
 const { FieldsPlugin } = require("@igomoon/hubspot-fields-js");
 
 module.exports = ({ account, autoupload }) => ({
@@ -66,27 +75,13 @@ module.exports = ({ account, autoupload }) => ({
   },
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-        },
-      },
-      {
-        test: /\.s[ac]ss$/i,
-        use: [
-          "style-loader",
-          { loader: "css-loader", options: { url: false } },
-          "sass-loader",
-        ],
-      },
-    ],
+		//...
+	]
   },
   plugins: [
 
-	// Add to your plugins
-	new FieldsPlugin(),
+    // STEP 2 : Add to the top of  your plugins
+    new FieldsPlugin(),
 
     new HubSpotAutoUploadPlugin({
       autoupload,
@@ -142,8 +137,8 @@ Field.blog()
 https://developers.hubspot.com/docs/cms/building-blocks/module-theme-fields#boolean
 
 ```javascript
-Field.Boolean()
-	.name("Boolean_field","Boolean Field")
+Field.boolean()
+	.name("boolean_field","Boolean Field")
 ```
 
 Setting additional options with `set` helper method
@@ -162,6 +157,7 @@ https://developers.hubspot.com/docs/cms/building-blocks/module-theme-fields#choi
 ```javascript
 Field.choice()
 	.name("choice_field","Choice Field")
+	.choices([])
 ```
 
 Setting additional options with `set` helper method
@@ -169,7 +165,7 @@ Setting additional options with `set` helper method
 ```javascript
 Field.choice()
 	.name("choice_field","Choice Field")
-	.set("choices",[
+	.choices([
 		["choice-1", "Choice 1"]
 	])
 	.set("display","select")
@@ -656,22 +652,15 @@ const { Group, Field } = require("@igomoon/hubspot-fields-js");
 
 new Group()
 	.name("group", "Group")
-	.set("children", [
-		
-		Field.text(),
-		
+	.children([	
+		Field.text(),		
 		// Other Fields/Groups
-
 		new Group()
 			.name("sub_content", "SubContent")
-			.set("children", [
-				
-				Field.text(),
-				
+			.children([				
+				Field.text(),				
 				// Other Fields/Groups
-
-			])
-		
+			])		
 	])
 ```
 
@@ -750,7 +739,7 @@ Field.text()
 ```javascript
 new Group()
 	.name("group","Group")
-	.set("children",[])
+	.children([])
 	.repeat()
 ```
 
@@ -759,7 +748,7 @@ Override the repeat options like so:
 ```javascript
 new Group()
 	.name("group","Group")
-	.set("children",[])
+	.children([])
 	.repeat({
 		"min": null,
 		"max": 5,
@@ -813,7 +802,7 @@ Field.text()
 
 `hiddenSubfields(subFields)`
 
-sets hidden_subfields under visibility
+Sets hidden_subfields under visibility
 
 ```javascript
 Field.text()
@@ -835,6 +824,26 @@ Field.text()
 ```javascript
 Field.text()
 	.locked(false)
+```
+
+### Choices
+
+For choice Field only
+`choices(choices = [])`
+
+```javascript
+Field.choice()
+	.choices([])
+```
+
+### Children
+
+For Groups Only
+`children(children = [])`
+
+```javascript
+new Group()
+	.children([])
 ```
 
 ## Advanced Usage
@@ -864,11 +873,9 @@ const { Field } = require("@igomoon/hubspot-fields-js");
 let cssID = require('../../../src/fields/cssID');
 
 module.exports = [
-
 	Field.text()
 		.name("title","Title")
 		.default("Text"),
-
 	// This will insert the CSS ID field for this module
 	cssID()
 ]; 
@@ -884,20 +891,16 @@ const { Group, Field } = require("@igomoon/hubspot-fields-js");
 let cssID = require('../../../src/fields/cssID');
 
 module.exports = [
-
 	new Group()
 		.name("group","Group")
-		.set("children",[
-
+		.children([
 			Field.text()
 				.name("title","Title")
-				.default("Text"),
-			
+				.default("Text"),			
 			Field.richText()
 				.name("text","Text")
 				.default("<p>This is just some placeholder text in a rich text field</p>")
 		])
-
 	// This will insert the CSS ID field for this module
 	cssID()
 ]; 
