@@ -706,14 +706,14 @@ Field.text()
 
 ```javascript
 Field.text()
-	.set()
+	.set("placeholder","Placeholder Text")
 ```
 
 ### Visibility
 
 `visibleIf(controllingField, regex, type = "EQUAL")`
 
-sets hidden_subfields under visibility
+Sets controlling field options under visibility
 
 ```javascript
 Field.text()
