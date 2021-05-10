@@ -256,7 +256,7 @@ class Field extends ModuleField {
             "name": "icon_field",
             "label": "Icon field",
 			"type": "icon"
-			//"default": {}
+			"default": {}
         }, overrides));
     }
 
@@ -272,12 +272,12 @@ class Field extends ModuleField {
             //"show_loading": false,
             //"resizable": true,
 			"type": "image",
-			// "default" : {
-			// 	"size_type" : "auto",
-			// 	"src" : "",
-			// 	"alt" : null,
-			// 	"loading": "disabled"
-			// }
+			"default" : {
+				"size_type" : "auto",
+				"src" : "",
+				"alt" : null,
+				"loading": "disabled"
+			}
         }, overrides));
     }
 
@@ -291,15 +291,15 @@ class Field extends ModuleField {
             "label": "Link field",
             "type": "link",
             //"supported_types": ["EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG"],
-            // "default": {
-			// 	"url" : {
-			// 		"content_id" : null,
-			// 		"type" : "EXTERNAL",
-			// 		"href" : ""
-			// 	},
-			// 	"open_in_new_tab" : false,
-			// 	"no_follow" : false
-			// }
+            "default": {
+				"url" : {
+					"content_id" : null,
+					"type" : "EXTERNAL",
+					"href" : ""
+				},
+				"open_in_new_tab" : false,
+				"no_follow" : false
+			}
         }, overrides));
     }
 
@@ -423,11 +423,11 @@ class Field extends ModuleField {
             "label": "URL field",
             "type": "url",
             //"supported_types": ["EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG"],
-            // "default": {
-			// 	"content_id" : null,
-			// 	"href" : "",
-			// 	"type" : "EXTERNAL"
-			// }
+            "default": {
+				"content_id" : null,
+				"href" : "",
+				"type" : "EXTERNAL"
+			}
         }, overrides));
     }
 	

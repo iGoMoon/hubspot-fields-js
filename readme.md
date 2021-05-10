@@ -1,6 +1,6 @@
 # HubSpot Fields JS <!-- omit in toc -->
 
-<img src="https://img.shields.io/badge/Version-1.1.3-brightgreen" />
+<img src="https://img.shields.io/badge/Version-1.1.4-brightgreen" />
 
 The package makes using JavaScript to generate HubSpot module `fields.json` files on local development straightforward.
 
