@@ -255,7 +255,7 @@ class Field extends ModuleField {
         return new Field(Object.assign({
             "name": "icon_field",
             "label": "Icon field",
-			"type": "icon"
+			"type": "icon",
 			"default": {}
         }, overrides));
     }
@@ -312,11 +312,11 @@ class Field extends ModuleField {
             "name": "logo_field",
             "label": "Logo field",
             "type": "logo",
-            // "default": {
-			// 	"override_inherited_src" : false,
-			// 	"src" : null,
-			// 	"alt" : null
-			// }
+            "default": {
+				"override_inherited_src" : false,
+				"src" : null,
+				"alt" : null
+			}
         }, overrides));
     }
 

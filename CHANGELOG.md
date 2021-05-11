@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.5] - 2021-05-11
+- Hot fixes
+- 
 ## [1.1.4] - 2021-05-10
 - Need some Defaults
  
