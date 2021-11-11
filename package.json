@@ -3,7 +3,7 @@
   "label": "hubspot-fields-js",
   "description": "A webpack plugin to generate HubSpot module fields.json files with js",
   "author": "iGoMoon",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",

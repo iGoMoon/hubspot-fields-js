@@ -2,9 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.6] - 2021-11-11
+- Allow null values in array and filter them out of the final JSON
+- `applyIf` helper method
+- `parseArgs` helper method
+
 ## [1.1.5] - 2021-05-11
 - Hot fixes
-- 
+
 ## [1.1.4] - 2021-05-10
 - Need some Defaults
  

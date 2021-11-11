@@ -21,12 +21,14 @@ class Group extends ModuleField {
     /**
      * Return field as JSON
      */
-    toJSON() {
-        this.data.children.map(child => {
-            return child.toJSON();
-        });
+	toJSON() {
+		this.data.children = this.data.children.filter(c => !!c)
+		this.data.children
+			.map(child => {
+				return child.toJSON();
+			});
 
-        return this.data;
+        return this.data
     }
 
 

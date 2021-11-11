@@ -1,5 +1,15 @@
 class ModuleField {
 
+	/**
+     * 
+     */
+	applyIf(show, callback) {
+		if (!!show) {
+			return callback(this)
+        }
+        return this;
+    }
+
 
     /**
      * 
