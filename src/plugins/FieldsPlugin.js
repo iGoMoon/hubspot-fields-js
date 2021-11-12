@@ -1,79 +1,87 @@
 const fs = require('fs');
 const glob = require('glob');
+const path = require('path'); // Use path to ensure files are resolved correctly across all OS
 
 const FieldTransformer = require('../fields/FieldTransformer');
 
 
 const clearFieldsJson = async compilation => {
-    return new Promise(async (resolve, reject) => {
-        let distFolder = compilation.options.output.path;
-        glob(distFolder + '/**/fields.json', {}, (err, files) => {
-            files.forEach(file => {
-                fs.unlinkSync(file);
-            });
+  return new Promise(async (resolve, reject) => {
+    let srcFolder = compilation.options.output.path;
+    glob(srcFolder + '/**/fields.json', {}, (err, files) => {
+      files.forEach(file => {
+        fs.unlinkSync(file);
+      });
 
-            resolve();
-        });
+      resolve();
     });
+  });
 }
 
 class FieldsPlugin {
 
-    async apply(compiler) {
+  async apply(compiler) {
 
-        // Clear out any old fields.json files before compiler runs.
-        // This is to ensure that we dont end up with duplicate fields.
-        compiler.hooks.run.tapPromise('FieldsPlugin', clearFieldsJson);
-        compiler.hooks.watchRun.tapPromise('FieldsPlugin', clearFieldsJson);
+    // Clear out any old fields.json files before compiler runs.
+    // This is to ensure that we dont end up with duplicate fields.
+    compiler.hooks.run.tapPromise('FieldsPlugin', clearFieldsJson);
+    compiler.hooks.watchRun.tapPromise('FieldsPlugin', clearFieldsJson);
+    compiler.hooks.emit.tapPromise('FieldsPlugin', clearFieldsJson);
 
-        // Transform the fields.json
-        compiler.hooks.afterEmit.tapPromise('FieldsPlugin', async compilation => {
-            return new Promise(async (resolve, reject) => {
-                // Set the distfolder to look for files
-                // options.context gives root of the project.
+    // Transform the fields.json
+    compiler.hooks.afterEmit.tapPromise('FieldsPlugin', async compilation => {
+      return new Promise(async (resolve, reject) => {
+        // Set the srcFolder to look for files
+        // options.context gives root of the project.
 
-                let distFolder = compilation.options.output.path;
+        // let distFo = compilation.options.output.path; 
+        let srcFolder = path.resolve("./src");
 
-                // Handle fields.js file
-                await new Promise((resolve, reject) => {
-                    // Find every modules fields.js file.
-                    glob(distFolder + '/**/fields.js', {}, (err, files) => {
-                        files.forEach(file => {
-                            try {
-                                let fields = require(file);
+        // console.log(distFo);
 
-                                // Transform to Json and append to fields.json file
-                                FieldTransformer.transform(file + 'on', fields);
+        // Handle fields.js file
+        await new Promise((resolve, reject) => {
+          // Find every modules fields.js file.
+          glob(srcFolder + '/**/fields.js', {}, (err, files) => {
+            console.log("files: ", files)
+            files.forEach(file => {
+              try {
+                let fields = require(file);
 
-                                if (!compilation.assets[file.replace(distFolder + '/', '') + 'on']) {
-                                    compilation.assets[file.replace(distFolder + '/', '') + 'on'] = {
-                                        source: function () { return Buffer.from(file) },
-                                        size: function () { return Buffer.byteLength(file) },
-                                        existsAt: file + 'on',
-                                        emitted: true
-                                    }
-                                }
+                // Grab full dist Path
+                let fullDistPath = file.replace("/src/", '/dist/')
 
-                                // Remove field.js file from dist directory.
-                                fs.unlinkSync(file);
-                                delete require.cache[require.resolve(file)];
+                // Transform to Json and append to fields.json file
+                FieldTransformer.transform(path.resolve(fullDistPath) + 'on', fields);
 
-                                // Remove fields.js from the compilation
-                                delete compilation.assets[file.replace(distFolder + '/', '')];
-                            } catch (e) {
-                                delete require.cache[require.resolve(file)];
-                                console.log("Could not transform: " + file + "\nError: " + e.message);
-                            }
-                        });
-                        resolve(); // resolve glob promise
-                    });
-                });
+                // remove fields.js from emittedAssets Set
+                compilation.emittedAssets.delete(file.replace(srcFolder + '/', ''))
 
+                // add fields.json to emittedAssets set
+                // Functionally tricks AutoUplaoder into thinking that 
+                // This file was updated as part of the actual webpack process
+                compilation.emittedAssets.add(file.replace(srcFolder + '/', '') + "on")
 
-                resolve(); // Resolve plugins apply promise
+                // Remove field.js file from dist directory.
+                fs.unlinkSync(fullDistPath);
+                delete require.cache[require.resolve(fullDistPath)];
+
+                // Remove fields.js from the compilation
+                delete compilation.assets[fullDistPath.replace(fullDistPath + '/', '')];
+              } catch (e) {
+                delete require.cache[require.resolve(file)];
+                console.log("Could not transform: " + file + "\nError: " + e.message);
+              }
             });
+            resolve(); // resolve glob promise
+          });
         });
-    }
+
+
+        resolve(); // Resolve plugins apply promise
+      });
+    });
+  }
 }
 
 module.exports = FieldsPlugin;
