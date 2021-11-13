@@ -54,6 +54,14 @@ class FieldsPlugin {
                 // Transform to Json and append to fields.json file
                 FieldTransformer.transform(path.resolve(fullDistPath) + 'on', fields);
 
+                // Likely unneeded at this point
+                // setting emitted to false because hs autoupload plugin 
+                // looks for this to be true in order to upload
+                compilation.assets[file.replace(srcFolder + '/', '')].emitted = false;
+
+                // remove fields.js from assets.
+                delete compilation.assets[file.replace(srcFolder + '/', '')];
+
                 // remove fields.js from emittedAssets Set
                 compilation.emittedAssets.delete(file.replace(srcFolder + '/', ''))
 
@@ -63,11 +71,11 @@ class FieldsPlugin {
                 compilation.emittedAssets.add(file.replace(srcFolder + '/', '') + "on")
 
                 // Remove field.js file from dist directory.
+                // remove fields.js from cache so it will reupload
+                // on future watch saves
                 fs.unlinkSync(fullDistPath);
                 delete require.cache[require.resolve(fullDistPath)];
 
-                // Remove fields.js from the compilation
-                delete compilation.assets[fullDistPath.replace(fullDistPath + '/', '')];
               } catch (e) {
                 delete require.cache[require.resolve(file)];
                 console.log("Could not transform: " + file + "\nError: " + e.message);
