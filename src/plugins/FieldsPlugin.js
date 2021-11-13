@@ -26,7 +26,6 @@ class FieldsPlugin {
     // This is to ensure that we dont end up with duplicate fields.
     compiler.hooks.run.tapPromise('FieldsPlugin', clearFieldsJson);
     compiler.hooks.watchRun.tapPromise('FieldsPlugin', clearFieldsJson);
-    compiler.hooks.emit.tapPromise('FieldsPlugin', clearFieldsJson);
 
     // Transform the fields.json
     compiler.hooks.afterEmit.tapPromise('FieldsPlugin', async compilation => {
