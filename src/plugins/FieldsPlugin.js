@@ -1,79 +1,87 @@
 const fs = require('fs');
 const glob = require('glob');
+const path = require('path'); // Use path to ensure files are resolved correctly across all OS
 
 const FieldTransformer = require('../fields/FieldTransformer');
 
-
-const clearFieldsJson = async compilation => {
-    return new Promise(async (resolve, reject) => {
-        let distFolder = compilation.options.output.path;
-        glob(distFolder + '/**/fields.json', {}, (err, files) => {
-            files.forEach(file => {
-                fs.unlinkSync(file);
-            });
-
-            resolve();
-        });
-    });
-}
-
 class FieldsPlugin {
 
-    async apply(compiler) {
+	async clearFieldsJson(compilation) {
+		return new Promise(async (resolve, reject) => {
+			let distFolder = compilation.options.output.path;
+			glob(distFolder + '/**/fields.json', {}, (err, files) => {
+				files.forEach(file => {
+					fs.unlinkSync(file);
+				});
+				resolve();
+			});
+		});
+	}
 
-        // Clear out any old fields.json files before compiler runs.
-        // This is to ensure that we dont end up with duplicate fields.
-        compiler.hooks.run.tapPromise('FieldsPlugin', clearFieldsJson);
-        compiler.hooks.watchRun.tapPromise('FieldsPlugin', clearFieldsJson);
+	async apply(compiler) {
 
-        // Transform the fields.json
-        compiler.hooks.afterEmit.tapPromise('FieldsPlugin', async compilation => {
-            return new Promise(async (resolve, reject) => {
-                // Set the distfolder to look for files
-                // options.context gives root of the project.
+		// Clear out any old fields.json files before compiler runs.
+		// This is to ensure that we dont end up with duplicate fields.
+		compiler.hooks.run.tapPromise('FieldsPlugin', this.clearFieldsJson);
+		compiler.hooks.watchRun.tapPromise('FieldsPlugin', this.clearFieldsJson);
+		compiler.hooks.emit.tapPromise('FieldsPlugin', this.clearFieldsJson);
 
-                let distFolder = compilation.options.output.path;
+		// Transform the fields.json
+		compiler.hooks.afterEmit.tapPromise('FieldsPlugin', async compilation => {
 
-                // Handle fields.js file
-                await new Promise((resolve, reject) => {
-                    // Find every modules fields.js file.
-                    glob(distFolder + '/**/fields.js', {}, (err, files) => {
-                        files.forEach(file => {
-                            try {
-                                let fields = require(file);
+			let webpackRoot = compilation.options.context
+			let srcFolder = path.resolve(webpackRoot, this.options.src);
+			let distFolder = compilation.options.output.path;
 
-                                // Transform to Json and append to fields.json file
-                                FieldTransformer.transform(file + 'on', fields);
+			// Handle fields.js file
+			return await new Promise((resolve, reject) => {
+				let files = glob.sync(`${srcFolder}/**/fields.js`)
 
-                                if (!compilation.assets[file.replace(distFolder + '/', '') + 'on']) {
-                                    compilation.assets[file.replace(distFolder + '/', '') + 'on'] = {
-                                        source: function () { return Buffer.from(file) },
-                                        size: function () { return Buffer.byteLength(file) },
-                                        existsAt: file + 'on',
-                                        emitted: true
-                                    }
-                                }
+				// Find every modules fields.js file.
+				files.forEach((JsSrcFullPath) => {
+					try {
 
-                                // Remove field.js file from dist directory.
-                                fs.unlinkSync(file);
-                                delete require.cache[require.resolve(file)];
+						// Get the module path for matching
+						let fileUniqueKey = JsSrcFullPath.split("/").slice(-2).join('/');
+						// Get the path from the DIST folder for the asset
+						let JsDistRelativePath = Object.keys(compilation.assets).find(a => a.endsWith(fileUniqueKey))
+						let JsonDistRelativePath = JsDistRelativePath.replace('fields.js', 'fields.json');
+						// Get Final Paths
+						let JsonDistFullPath = path.resolve(distFolder, './' + JsonDistRelativePath);
 
-                                // Remove fields.js from the compilation
-                                delete compilation.assets[file.replace(distFolder + '/', '')];
-                            } catch (e) {
-                                delete require.cache[require.resolve(file)];
-                                console.log("Could not transform: " + file + "\nError: " + e.message);
-                            }
-                        });
-                        resolve(); // resolve glob promise
-                    });
-                });
+						let fields = require(JsSrcFullPath);
+						// Transform to Json and append to fields.json file
+						FieldTransformer.transform(JsonDistFullPath, fields);
 
+						// If the file is not yet added to emittedAssets then handle it now so fields.js is not uploaded to HubSpot
 
-                resolve(); // Resolve plugins apply promise
-            });
-        });
-    }
+						if (!compilation.emittedAssets[JsDistRelativePath]) {
+							// remove fields.js from assets because hsAutouploadPlugin looks for this to be emitted: true in order to upload
+							delete compilation.assets[JsDistRelativePath];
+							// remove fields.js from emittedAssets Set
+							compilation.emittedAssets.delete(JsDistRelativePath)
+							// add json version to emittedAssets set. Functionally tricks AutoUplaoder into thinking that this file was updated as part of the actual webpack process
+							compilation.emittedAssets.add(JsonDistRelativePath)
+						}
+
+						// Remove field.js file from dist directory.
+						let JsDistFullPath = path.resolve(distFolder, './' + JsDistRelativePath);
+						fs.existsSync(JsDistFullPath) ? fs.unlinkSync(JsDistFullPath) : null;
+						// remove fields.js from cache so it will reupload on future watch saves
+						delete require.cache[require.resolve(JsSrcFullPath)]
+
+					} catch (e) {
+						delete require.cache[require.resolve(JsSrcFullPath)];
+						console.log("Could not transform: " + JsSrcFullPath + "\nError: " + e.message);
+					}
+
+				});
+
+				resolve();
+			});
+
+		});
+	}
 }
 
 module.exports = FieldsPlugin;
