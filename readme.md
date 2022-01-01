@@ -144,8 +144,8 @@ Field.boolean()
 Setting additional options with `set` helper method
 
 ```javascript
-Field.color()
-	.name("color_field","color Field")
+Field.boolean()
+	.name("boolean_field","Boolean Field")
 	.set("display","toggle")
 	.default(false)
 ```
