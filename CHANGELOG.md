@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2022-01-01
+- Js Partials are now imported relative to src file, NOT from final dist file. Field JS tranformation using the src file and then updates webpack's emission functionlity to properly handle the upload.
+- Plugin now accepts options
+     - `src`: The starting directory to search for field.js files eg. "./src"
+     - `extraDirsToWatch`: an array of relative paths to directories that will trigger a recompilation. Useful for FieldJS partials
+     - `ignore`: An array of relative paths to ignore when searching for field.js files  
+
+	```javascript
+	new FieldsPlugin({
+		"src": "",
+		"extraDirsToWatch" : ["./src/fields"],
+		"ignore": []
+	})
+	```
+
 ## [1.1.6] - 2021-11-11
 - Allow null values in array and filter them out of the final JSON
 - `applyIf` helper method
