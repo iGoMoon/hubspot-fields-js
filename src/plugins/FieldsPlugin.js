@@ -6,6 +6,39 @@ const FieldTransformer = require('../fields/FieldTransformer');
 
 class FieldsPlugin {
 
+	constructor(options = {}) {
+		this.options = Object.assign({
+			src: "",
+			extraDirsToWatch: [],
+			ignore: []
+		}, options);
+	}
+
+	addAdditionalDirectoriesToWatch(compilation) {
+		let watchDirs = this.options.extraDirsToWatch
+		watchDirs = Array.isArray(watchDirs) ? watchDirs : watchDirs.split(',')
+
+		watchDirs.forEach(dir => {
+			let context = path.resolve(compilation.options.context, dir)
+			compilation.contextDependencies.add(context)
+		})
+	}
+
+	defineFoldersToIgnore(compilation) {
+		let ignore = []
+		// Get from options
+		let ignoreDirs = this.options.ignore
+		ignoreDirs = Array.isArray(ignoreDirs) ? ignoreDirs : ignoreDirs.split(',')
+		// Add Defaults
+		ignoreDirs = ignoreDirs.concat(['./dist/**', './node_modules/**'])
+		// Reolve
+		ignoreDirs.forEach(i => {
+			ignore.push(path.resolve(compilation.options.context, i))
+		})
+		// Return
+		return [... new Set(ignore)]
+	}
+
 	async clearFieldsJson(compilation) {
 		return new Promise(async (resolve, reject) => {
 			let distFolder = compilation.options.output.path;
@@ -33,9 +66,13 @@ class FieldsPlugin {
 			let srcFolder = path.resolve(webpackRoot, this.options.src);
 			let distFolder = compilation.options.output.path;
 
+			// Setup
+			this.addAdditionalDirectoriesToWatch(compilation)
+			let ignore = this.defineFoldersToIgnore(compilation)
+
 			// Handle fields.js file
 			return await new Promise((resolve, reject) => {
-				let files = glob.sync(`${srcFolder}/**/fields.js`)
+				let files = glob.sync(`${srcFolder}/**/fields.js`, { ignore })
 
 				// Find every modules fields.js file.
 				files.forEach((JsSrcFullPath) => {

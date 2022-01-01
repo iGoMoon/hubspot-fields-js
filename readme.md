@@ -59,6 +59,10 @@ npm install @igomoon/hubspot-fields-js --save-dev
 
 1. Set up a hubspot.config.yml using the HubSpot CMS local development instructions.
 2. Add the **hubspot-fields-js** plugin to your webpack.config.js.
+   - **Options**
+     - `src`: The starting directory to search for field.js files eg. "./src"
+     - `extraDirsToWatch`: an array of relative paths to directories that will trigger a recompilation. Useful for FieldJS partials
+     - `ignore`: An array of relative paths to ignore when searching for field.js files
 
 Example `webpack.config.js`
 
@@ -81,7 +85,11 @@ module.exports = ({ account, autoupload }) => ({
   plugins: [
 
     // STEP 2 : Add to the top of  your plugins
-    new FieldsPlugin(),
+    new FieldsPlugin({
+		src: "",
+		extraDirsToWatch : ["./src/fields"],
+		ignore: []
+	}),
 
     new HubSpotAutoUploadPlugin({
       autoupload,
@@ -89,15 +97,17 @@ module.exports = ({ account, autoupload }) => ({
       src: "dist",
       dest: "my-project",
     }),
+
     new CopyWebpackPlugin([
       { from: "src/images", to: "images" },
       { from: "src/modules", to: "modules" },
       { from: "src/templates", to: "templates" },
     ]),
+
   ],
 });
 ```
-3. Run webpack as normal to compile your project and convert `fields.js` to `fields.json`.
+1. Run webpack as normal to compile your project and convert `fields.js` to `fields.json`.
 
 
 ## Example fields.js file
