@@ -6,6 +6,7 @@ class Group extends ModuleField {
         super();
         this.data = Object.assign({
             "name": "group",
+            // "tab" : "STYLE" // Can Only Be Used When You Want Top create a style Field.
             "label": "Group",
             "required": false,
             "locked": false,

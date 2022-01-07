@@ -166,6 +166,16 @@ class ModuleField {
         return this;
     }
 
+    /**
+     * Set tab Type for Groups
+     * for use only with Style Tabs
+     * @param {String} tab 
+     */
+    tab(tab) {
+        this.data.tab = tab;
+        return this;
+    }
+
 }
 
 module.exports = ModuleField;
